@@ -94,24 +94,23 @@ ON onrs(onr);
 CREATE VIEW item_category AS
 SELECT nama_barang
 FROM onrs
-WHERE kategori = 'Ibu dan Anak';
+WHERE kategori = '3';
 
 /*JOIN*/
 SELECT o.nama_barang
 FROM onrs o
 JOIN users u ON o.pelaku_id = u.user_id
-JOIN transaksi t ON (u.user_id=o.kategori AND u.onr_id=t.onr_id)
-WHERE k.nama = 'Ibu dan Anak';
+JOIN transaksis t ON (u.user_id=o.`pelaku_id` AND o.onr_id=t.onr_id)
+WHERE u.`user_nama` = 'Khawari';
 
 /*CURSOR*/
 DELIMITER $$
-CREATE PROCEDURE order()
+CREATE PROCEDURE transaksi_waktu()
 BEGIN
     SELECT DISTINCT *
-    FROM  transaksi
-        LEFT JOIN pemesan ON transaksi.id_pemesan = pemesan.id_pemesan
-        LEFT JOIN memutar ON transaksi.id_memutar = memutar.id_memutar
-        LEFT JOIN film    ON memutar.id_film = film.id_film
-    WHERE  film.nama_film = "London Love Story";
+    FROM transaksis
+    WHERE waktu_transaksi='2018-05-30';
 END$$
 DELIMITER ;
+
+CALL transaksi_waktu();

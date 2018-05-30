@@ -1,5 +1,4 @@
 /* ALMAS AQMARINA*/
-
 /* TRIGGER */
 CREATE TABLE transaksi_order LIKE transaksi;
 ALTER TABLE transaksi_order ADD
@@ -61,7 +60,8 @@ CREATE FUNCTION tampil_mahasiswa(tahun INT)
     END$$
 DELIMITER ;*/
 
-/*PROCEDURE*/
+/*PROCEDURE
+
 DELIMITER $$
 CREATE PROCEDURE tambah(idKategori CHAR)
 BEGIN
@@ -70,7 +70,7 @@ BEGIN
 END $$
 DELIMITER ;
 
-CALL tambah('1');
+CALL tambah('1');*/
 
 /*INDEX*/
 SELECT * FROM onrs
@@ -81,8 +81,9 @@ ON onrs(nama_barang);
 
 /*VIEW*/
 CREATE VIEW harga_item AS
+SELECT *
 FROM onrs
-WHERE harga_item='123123';
+WHERE harga='123123';
 
 /*JOIN*/
 SELECT u.`user_nama`
@@ -99,7 +100,7 @@ BEGIN
    DECLARE harganya INT(3);
    DECLARE flag     BOOL DEFAULT TRUE;
    DECLARE diskonbarang CURSOR
-  FOR   SELECT id_transaksi, total_harga
+  FOR   SELECT transaksi_id, total_harga
     FROM transaksis;
    DECLARE CONTINUE HANDLER
   FOR   NOT FOUND
@@ -113,11 +114,12 @@ BEGIN
   END IF;
   
   IF harganya > 350000 THEN
-    UPDATE transaksis SET total_harga=total_harga-25000 WHERE id_transaksi=idnya;
+    UPDATE transaksis SET total_harga=total_harga-25000 WHERE transaksi_id=idnya;
   END IF;
    END LOOP;
    CLOSE diskonbarang;
-END $$
-DELIMITER;
+END$$
+DELIMITER ;
 
+INSERT INTO transaksis VALUES('1','7','2026ce80-6312-11e8-80a4-a1cd0bdef95d','400000','4.5');
 CALL excursor5 ();
