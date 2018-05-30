@@ -59,3 +59,17 @@ CREATE FUNCTION tampil_mahasiswa(tahun INT)
     RETURN jml;
     END$$
 DELIMITER ;*/
+
+/*PROCEDURE*/
+
+DELIMITER $$
+CREATE PROCEDURE tambah(idKategori CHAR)
+AFTER UPDATE ON onrs.kategori
+FOR kategoris
+BEGIN
+  UPDATE FROM kategoris k
+  WHERE idKategori = kategoris_id
+END $$
+DELIMITER ;
+
+CALL tambah('1');
