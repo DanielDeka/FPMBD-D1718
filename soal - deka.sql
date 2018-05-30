@@ -49,7 +49,7 @@ WHERE onr_id='b2b646d813884ee6a5985475448660e0';
 
 /* FUNCTION */
 DELIMITER $$
-CREATE FUNCTION jumlah_itemUser(idUser CHAR(50))
+CREATE FUNCTION jumlah_itemOffer(idUser CHAR(50))
     RETURNS INT
     DETERMINISTIC
     BEGIN
@@ -57,6 +57,20 @@ CREATE FUNCTION jumlah_itemUser(idUser CHAR(50))
     SELECT COUNT(onrs.onr_id) AS Jumlah_ItemOffer INTO jumlahItem
     FROM onrs INNER JOIN users ON users.`user_id`=onrs.`pelaku_id`
     WHERE onrs.onr = 'OFFER'
+    AND users.user_id = idUser;
+    RETURN jumlahItem;
+    END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE FUNCTION jumlah_itemRequest(idUser CHAR(50))
+    RETURNS INT
+    DETERMINISTIC
+    BEGIN
+    DECLARE jumlahItem INT;
+    SELECT COUNT(onrs.onr_id) AS Jumlah_ItemOffer INTO jumlahItem
+    FROM onrs INNER JOIN users ON users.`user_id`=onrs.`pelaku_id`
+    WHERE onrs.onr = 'REQUEST'
     AND users.user_id = idUser;
     RETURN jumlahItem;
     END$$

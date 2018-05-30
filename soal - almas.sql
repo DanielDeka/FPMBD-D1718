@@ -46,19 +46,58 @@ DELIMITER ;
 DELETE FROM transaksi
 WHERE transaksi_id='e91fdbe920ec4be4a3700934b574e5e2';
 
-/*FUNCTION
 DELIMITER $$
-CREATE FUNCTION tampil_mahasiswa(tahun INT)
+CREATE FUNCTION jumlah_itemMakanan(idUser CHAR(50))
     RETURNS INT
     DETERMINISTIC
     BEGIN
-    DECLARE jml INT;
-    SELECT COUNT(*) AS jml_mhs INTO jml
-    FROM mahasiswa
-    WHERE EXTRACT(YEAR FROM tgl_lhr)=tahun;
-    RETURN jml;
+    DECLARE jumlahItem INT;
+    SELECT COUNT(onrs.onr_id) AS Jumlah_ItemOffer INTO jumlahItem
+    FROM onrs INNER JOIN users ON users.`user_id`=onrs.`pelaku_id`
+    WHERE onrs.kategori = 'Makanan'
+    AND users.user_id = idUser;
+    RETURN jumlahItem;
     END$$
-DELIMITER ;*/
+DELIMITER ;
+
+CREATE FUNCTION jumlah_itemIbuanak(idUser CHAR(50))
+    RETURNS INT
+    DETERMINISTIC
+    BEGIN
+    DECLARE jumlahItem INT;
+    SELECT COUNT(onrs.onr_id) AS Jumlah_ItemOffer INTO jumlahItem
+    FROM onrs INNER JOIN users ON users.`user_id`=onrs.`pelaku_id`
+    WHERE onrs.kategori = 'Tas dan Aksesoris'
+    AND users.user_id = idUser;
+    RETURN jumlahItem;
+    END$$
+DELIMITER ;
+
+CREATE FUNCTION jumlah_itemUser(idUser CHAR(50))
+    RETURNS INT
+    DETERMINISTIC
+    BEGIN
+    DECLARE jumlahItem INT;
+    SELECT COUNT(onrs.onr_id) AS Jumlah_ItemOffer INTO jumlahItem
+    FROM onrs INNER JOIN users ON users.`user_id`=onrs.`pelaku_id`
+    WHERE onrs.kategori = 'Ibu dan Anak'
+    AND users.user_id = idUser;
+    RETURN jumlahItem;
+    END$$
+DELIMITER ;
+
+CREATE FUNCTION jumlah_itemUser(idUser CHAR(50))
+    RETURNS INT
+    DETERMINISTIC
+    BEGIN
+    DECLARE jumlahItem INT;
+    SELECT COUNT(onrs.onr_id) AS Jumlah_ItemOffer INTO jumlahItem
+    FROM onrs INNER JOIN users ON users.`user_id`=onrs.`pelaku_id`
+    WHERE onrs.kategori = 'Games'
+    AND users.user_id = idUser;
+    RETURN jumlahItem;
+    END$$
+DELIMITER ;
 
 /*PROCEDURE
 
