@@ -90,3 +90,34 @@ FROM users u
 JOIN onrs o ON u.user_id=o.pelaku_id
 LEFT JOIN kategoris k ON k.kategori_id=o.kategori
 WHERE k.nama = 'Ibu dan Anak';
+
+/*CURSOR*/
+DELIMITER $$
+CREATE PROCEDURE excursor5()
+BEGIN
+   DECLARE idnya    CHAR(10);
+   DECLARE harganya INT(3);
+   DECLARE flag     BOOL DEFAULT TRUE;
+   DECLARE diskonbarang CURSOR
+  FOR   SELECT id_transaksi, total_harga
+    FROM transaksis;
+   DECLARE CONTINUE HANDLER
+  FOR   NOT FOUND
+    SET flag=FALSE;
+   
+   OPEN diskonbarang;
+   
+   satu: LOOP
+      FETCH diskonbarang INTO idnya, harganya;
+  IF flag=FALSE THEN LEAVE satu;
+  END IF;
+  
+  IF harganya > 350000 THEN
+    UPDATE transaksis SET total_harga=total_harga-25000 WHERE id_transaksi=idnya;
+  END IF;
+   END LOOP;
+   CLOSE diskonbarang;
+END $$
+DELIMITER;
+
+CALL excursor5 ();
