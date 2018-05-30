@@ -1,7 +1,7 @@
 /* DANIEL KURNIAWAN */
 /* TRIGGER */
 
-CREATE TABLE log_onr LIKE onr;
+CREATE TABLE log_onr LIKE onrs;
 ALTER TABLE log_onr ADD
 (
 `tgl_perubahan` DATETIME,
@@ -11,7 +11,7 @@ ALTER TABLE log_onr ADD
 -- Insert new data
 DELIMITER$$
 CREATE TRIGGER insert_onr
-AFTER INSERT ON onr
+AFTER INSERT ON onrs
 FOR EACH ROW
 BEGIN
   INSERT INTO log_onr VALUES (new.onr_id, new.pelaku_id, new.nama_barang, new.kategori, new.deskripsi, new.harga, new.jumlah, new.waktu, new.kota_barang, new.kota_onr, new.onr, SYSDATE(), 'INSERT');
@@ -23,21 +23,21 @@ INSERT INTO `onr` VALUES('b2b646d813884ee6a5985475448660e0','423d35da44b547f0b74
 -- update data
 DELIMITER$$
 CREATE TRIGGER update_harga
-AFTER UPDATE ON onr
+AFTER UPDATE ON onrs
 FOR EACH ROW
 BEGIN
   INSERT INTO log_onr VALUES (old.onr_id, old.pelaku_id, old.nama_barang, old.kategori, old.deskripsi, new.harga, old.jumlah, old.waktu, old.kota_barang, old.kota_onr, old.onr, SYSDATE(), 'UPDATE');
 END$$
 DELIMITER ;
 
-UPDATE onr
+UPDATE onrs
 SET harga=4
 WHERE onr_id='6e078756f71643839b32aed67b8176c6';
 
 -- delete data
 DELIMITER$$
 CREATE TRIGGER delete_onr
-AFTER DELETE ON onr
+AFTER DELETE ON onrs
 FOR EACH ROW
 BEGIN
   INSERT INTO log_onr VALUES (old.onr_id, old.pelaku_id, old.nama_barang, old.kategori, old.deskripsi, old.harga, old.jumlah, old.waktu, old.kota_barang, old.kota_onr, old.onr, SYSDATE(), 'DELETE');
@@ -60,7 +60,7 @@ CREATE FUNCTION jumlah_itemOffer(idUser CHAR(50))
     AND users.user_id = idUser;
     RETURN jumlahItem;
     END$$
-DELIMITER ;
+DELIMITER;
 
 DELIMITER $$
 CREATE FUNCTION jumlah_itemRequest(idUser CHAR(50))
