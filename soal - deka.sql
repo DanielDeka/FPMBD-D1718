@@ -82,3 +82,36 @@ DELIMITER ;
 
 
 CALL sesuaikan('Class Basic','100000');
+
+/*INDEX*/
+SELECT * FROM onrs
+WHERE onr LIKE 'OFFER';
+
+CREATE INDEX idx_onr
+ON onrs(onr);
+
+/*VIEW*/
+CREATE VIEW item_category AS
+SELECT nama_barang
+FROM onrs
+WHERE kategori = 'Ibu dan Anak';
+
+/*JOIN*/
+SELECT o.nama_barang
+FROM onrs o
+JOIN users u ON o.pelaku_id = u.user_id
+JOIN transaksi t ON (u.user_id=o.kategori AND u.onr_id=t.onr_id)
+WHERE k.nama = 'Ibu dan Anak';
+
+/*CURSOR*/
+DELIMITER $$
+CREATE PROCEDURE order()
+BEGIN
+    SELECT DISTINCT *
+    FROM  transaksi
+        LEFT JOIN pemesan ON transaksi.id_pemesan = pemesan.id_pemesan
+        LEFT JOIN memutar ON transaksi.id_memutar = memutar.id_memutar
+        LEFT JOIN film    ON memutar.id_film = film.id_film
+    WHERE  film.nama_film = "London Love Story";
+END$$
+DELIMITER ;
