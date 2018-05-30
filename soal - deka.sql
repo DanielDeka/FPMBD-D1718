@@ -14,7 +14,7 @@ CREATE TRIGGER insert_onr
 AFTER INSERT ON onrs
 FOR EACH ROW
 BEGIN
-  INSERT INTO log_onr VALUES (new.onr_id, new.pelaku_id, new.nama_barang, new.kategori, new.deskripsi, new.harga, new.jumlah, new.waktu, new.kota_barang, new.kota_onr, new.onr, SYSDATE(), 'INSERT');
+  INSERT INTO log_onr VALUES (new.onr_id, new.pelaku_id, new.nama_barang, new.kategori, new.deskripsi, new.harga, new.jumlah, new.waktu, new.kota_barang, new.kota_onr, new.onr, new.onr_foto, SYSDATE(), 'INSERT');
 END$$
 DELIMITER ;
 
@@ -26,7 +26,7 @@ CREATE TRIGGER update_harga
 AFTER UPDATE ON onrs
 FOR EACH ROW
 BEGIN
-  INSERT INTO log_onr VALUES (old.onr_id, old.pelaku_id, old.nama_barang, old.kategori, old.deskripsi, new.harga, old.jumlah, old.waktu, old.kota_barang, old.kota_onr, old.onr, SYSDATE(), 'UPDATE');
+  INSERT INTO log_onr VALUES (old.onr_id, old.pelaku_id, old.nama_barang, old.kategori, old.deskripsi, new.harga, old.jumlah, old.waktu, old.kota_barang, old.kota_onr, old.onr, old.onr_foto, SYSDATE(), 'UPDATE');
 END$$
 DELIMITER ;
 
@@ -40,7 +40,7 @@ CREATE TRIGGER delete_onr
 AFTER DELETE ON onrs
 FOR EACH ROW
 BEGIN
-  INSERT INTO log_onr VALUES (old.onr_id, old.pelaku_id, old.nama_barang, old.kategori, old.deskripsi, old.harga, old.jumlah, old.waktu, old.kota_barang, old.kota_onr, old.onr, SYSDATE(), 'DELETE');
+  INSERT INTO log_onr VALUES (old.onr_id, old.pelaku_id, old.nama_barang, old.kategori, old.deskripsi, old.harga, old.jumlah, old.waktu, old.kota_barang, old.kota_onr, old.onr, old.onr_foto, SYSDATE(), 'DELETE');
 END$$
 DELIMITER ;
 
@@ -76,7 +76,7 @@ CREATE FUNCTION jumlah_itemRequest(idUser CHAR(50))
     END$$
 DELIMITER ;
 
-SELECT DISTINCT jumlah_itemUser('a967b5e523604ce4898720edbd004928') AS 'Jumlah item offer' FROM users u, onrs, transaksi t, kategori k;
+SELECT DISTINCT jumlah_itemUser('a967b5e523604ce4898720edbd004928') AS 'Jumlah item offer' FROM users u, onrs, transaksis t, kategorsi k;
 
 /* PROCEDURE */
 DELIMITER $$
