@@ -63,13 +63,12 @@ DELIMITER ;*/
 /*PROCEDURE*/
 
 DELIMITER $$
-CREATE PROCEDURE tambah(idKategori CHAR)
-AFTER UPDATE ON onrs.kategori
-FOR kategoris
+CREATE PROCEDURE jumlah_kat()
 BEGIN
-  UPDATE FROM kategoris k
-  WHERE idKategori = kategoris_id
+  UPDATE kategoris
+  SET jumlah_item = COUNT(onrs.kategori)
+  WHERE onrs.kategori = nama_kategori
 END $$
 DELIMITER ;
 
-CALL tambah('1');
+CALL jumlah_kat();
