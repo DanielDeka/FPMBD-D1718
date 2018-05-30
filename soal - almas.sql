@@ -1,4 +1,5 @@
 /* ALMAS AQMARINA*/
+
 /* TRIGGER */
 CREATE TABLE transaksi_order LIKE transaksi;
 ALTER TABLE transaksi_order ADD
@@ -61,18 +62,31 @@ CREATE FUNCTION tampil_mahasiswa(tahun INT)
 DELIMITER ;*/
 
 /*PROCEDURE*/
-
 DELIMITER $$
-CREATE PROCEDURE jumlah_kat()
+CREATE PROCEDURE tambah(idKategori CHAR)
 BEGIN
-  UPDATE kategoris
-  SET jumlah_item = COUNT(onrs.kategori)
-  WHERE onrs.kategori = nama_kategori
+  UPDATE SET kategoris k
+  WHERE idKategori = k.kategoris_id
 END $$
 DELIMITER ;
 
-CALL jumlah_kat();
+CALL tambah('1');
 
 /*INDEX*/
+SELECT * FROM onrs
+WHERE nama_barang LIKE '%deka%';
+
 CREATE INDEX idx_kata
-ON onrs(nama_barang='%Surabaya%');
+ON onrs(nama_barang);
+
+/*VIEW*/
+CREATE VIEW harga_item AS
+FROM onrs
+WHERE harga_item='123123';
+
+/*JOIN*/
+SELECT u.`user_nama`
+FROM users u
+JOIN onrs o ON u.user_id=o.pelaku_id
+LEFT JOIN kategoris k ON k.kategori_id=o.kategori
+WHERE k.nama = 'Ibu dan Anak';
