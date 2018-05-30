@@ -1,7 +1,7 @@
 /* ALMAS AQMARINA*/
-/* TRIGGER */
-CREATE TABLE transaksi_order LIKE transaksi;
-ALTER TABLE transaksi_order ADD
+/* TRIGGER PROFILE*/
+CREATE TABLE users_new LIKE users;
+ALTER TABLE users_new ADD
 (
 `tgl_perubahan` DATETIME,
 `status` VARCHAR(200)
@@ -9,42 +9,44 @@ ALTER TABLE transaksi_order ADD
 
 -- Insert new data
 DELIMITER$$
-CREATE TRIGGER tambah_transaksi
-AFTER INSERT ON transaksi
+CREATE TRIGGER insert_users
+AFTER INSERT ON users
 FOR EACH ROW
 BEGIN
-  INSERT INTO transaksi_order VALUES (new.transaksi_id, new.onr_id, new.pelaku_id, new.user_id, new.jumlah_barang, new.total_harga, new.rate, SYSDATE(), 'INSERT');
+  INSERT INTO `users` VALUES (new.`user_id`, new.`user_nama`, new.`email`, new.`password`, new.`alamat`, new.`jenis_kel`, new.`tgl_lahir`, new.`rating`, new.`token`, new.`aboutme`, new.`no_telp`, new.`remember_token`, new.`created_at`, new,`updated_at`, SYSDATE(), 'INSERT');
 END$$
 DELIMITER;
 
-INSERT INTO `transaksi` VALUES('9ef290e13c1848d8855ed55d62e6ac10','87e94021be0a474da21a93f93c303924','45b1d452950c40048c75c40fefe04f9e','a967b5e523604ce4898720edbd004928','1','100000','4.2');
+bikin akun di web
 
 -- update data
 DELIMITER$$
-CREATE TRIGGER update_jumlah_barang
-AFTER UPDATE ON transaksi
+CREATE TRIGGER update_users
+AFTER UPDATE ON users
 FOR EACH ROW
 BEGIN
-  INSERT INTO transaksi_order VALUES (old.transaksi_id, old.onr_id, old.pelaku_id, old.user_id, new.jumlah_barang, old.total_harga, old.rate, SYSDATE(), 'UPDATE');
+  INSERT INTO `users` VALUES (old.`user_id`, new.`user_nama`, old.`email`, old.`password`, new.`alamat`, old.`jenis_kel`, old.`tgl_lahir`, old.`rating`, old.`token`, new.`aboutme`, new.`no_telp`, old.`remember_token`, old.`created_at`, old,`updated_at`, SYSDATE(), 'UPDATE');
 END$$
 DELIMITER ;
 
-UPDATE transaksi
-SET jumlah_barang=3
-WHERE onr_id='293c7a0465794f3d897bd66f387b8b28';
+UPDATE users
+SET user_nama='Siapa Gitu', alamat='Dimana Gitu', aboutme='-', no_telp='087876543217'
+WHERE user_id='0dd93cd0-6440-11e8-bea8-9f219474dfdb';
 
 -- delete data
 DELIMITER$$
-CREATE TRIGGER delete_jumlah_barang
-AFTER DELETE ON transaksi
+CREATE TRIGGER delete_users
+AFTER DELETE ON users
 FOR EACH ROW
 BEGIN
-  INSERT INTO transaksi_order VALUES (old.transaksi_id, old.onr_id, old.pelaku_id, old.user_id, old.jumlah_barang, old.total_harga, old.rate, SYSDATE(), 'DELETE');
+  INSERT INTO `users` VALUES (old.`user_id`, old.`user_nama`, old.`email`, old.`password`, old.`alamat`, old.`jenis_kel`, old.`tgl_lahir`, old.`rating`, old.`token`, old.`aboutme`, old.`no_telp`, old.`remember_token`, old.`created_at`, old,`updated_at`, SYSDATE(), 'DELETE');
 END$$
 DELIMITER ;
 
-DELETE FROM transaksi
-WHERE transaksi_id='e91fdbe920ec4be4a3700934b574e5e2';
+DELETE FROM users
+WHERE user_id='0dd93cd0-6440-11e8-bea8-9f219474dfdb';
+
+/*FUNCTION KATEGORI DI PROFILE*/
 
 DELIMITER $$
 CREATE FUNCTION jumlah_itemMakanan(idUser CHAR(50))
@@ -102,39 +104,41 @@ CREATE FUNCTION jumlah_itemGames(idUser CHAR(50))
     END$$
 DELIMITER ;
 
-/*PROCEDURE
+/*PROCEDURE KATEGORI DI PAGE KATEGORI*/
 
 DELIMITER $$
 CREATE PROCEDURE tambah(idKategori CHAR)
 BEGIN
-  UPDATE SET kategoris k
-  WHERE idKategori = k.kategoris_id
+  UPDATE kategoris k, onrs o SET k.jumlah_item=COUNT(o.kategori)
+  WHERE idKategori = k.kategori_id
+  AND k.kategori_id = o.kategori
 END $$
 DELIMITER ;
 
-CALL tambah('1');*/
+CALL tambah('1');
 
-/*INDEX*/
+/*INDEX ONRS NAMA BARANG*/
 SELECT * FROM onrs
 WHERE nama_barang LIKE '%deka%';
 
 CREATE INDEX idx_kata
 ON onrs(nama_barang);
 
-/*VIEW*/
+/*VIEW ONRS HARGA TERTENTU*/
 CREATE VIEW harga_item AS
 SELECT *
 FROM onrs
 WHERE harga='123123';
 
-/*JOIN*/
+/*JOIN USER YANG MELAKUKAN OFFER PADA KATEGORI TERTENTU*/
 SELECT u.`user_nama`
 FROM users u
 JOIN onrs o ON u.user_id=o.pelaku_id
 LEFT JOIN kategoris k ON k.kategori_id=o.kategori
-WHERE k.nama = 'Ibu dan Anak';
+WHERE o.onr='OFFER'
+AND k.nama = 'Ibu dan Anak';
 
-/*CURSOR*/
+/*CURSOR DISKON 25.000 > 350.000*/
 DELIMITER $$
 CREATE PROCEDURE excursor5()
 BEGIN
