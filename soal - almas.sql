@@ -54,7 +54,7 @@ CREATE FUNCTION jumlah_itemMakanan(idUser CHAR(50))
     DECLARE jumlahItem INT;
     SELECT COUNT(onrs.onr_id) AS Jumlah_ItemOffer INTO jumlahItem
     FROM onrs INNER JOIN users ON users.`user_id`=onrs.`pelaku_id`
-    WHERE onrs.kategori = 'Makanan'
+    WHERE onrs.kategori = '1'
     AND users.user_id = idUser;
     RETURN jumlahItem;
     END$$
@@ -67,7 +67,7 @@ CREATE FUNCTION jumlah_itemIbuanak(idUser CHAR(50))
     DECLARE jumlahItem INT;
     SELECT COUNT(onrs.onr_id) AS Jumlah_ItemOffer INTO jumlahItem
     FROM onrs INNER JOIN users ON users.`user_id`=onrs.`pelaku_id`
-    WHERE onrs.kategori = 'Tas dan Aksesoris'
+    WHERE onrs.kategori = '2'
     AND users.user_id = idUser;
     RETURN jumlahItem;
     END$$
@@ -80,7 +80,7 @@ CREATE FUNCTION jumlah_itemUser(idUser CHAR(50))
     DECLARE jumlahItem INT;
     SELECT COUNT(onrs.onr_id) AS Jumlah_ItemOffer INTO jumlahItem
     FROM onrs INNER JOIN users ON users.`user_id`=onrs.`pelaku_id`
-    WHERE onrs.kategori = 'Ibu dan Anak'
+    WHERE onrs.kategori = '3'
     AND users.user_id = idUser;
     RETURN jumlahItem;
     END$$
@@ -93,7 +93,7 @@ CREATE FUNCTION jumlah_itemUser(idUser CHAR(50))
     DECLARE jumlahItem INT;
     SELECT COUNT(onrs.onr_id) AS Jumlah_ItemOffer INTO jumlahItem
     FROM onrs INNER JOIN users ON users.`user_id`=onrs.`pelaku_id`
-    WHERE onrs.kategori = 'Games'
+    WHERE onrs.kategori = '4'
     AND users.user_id = idUser;
     RETURN jumlahItem;
     END$$
