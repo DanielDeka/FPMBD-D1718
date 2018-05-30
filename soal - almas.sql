@@ -72,3 +72,7 @@ END $$
 DELIMITER ;
 
 CALL jumlah_kat();
+
+/*INDEX*/
+CREATE INDEX idx_kata
+ON onrs(nama_barang='%Surabaya%');
