@@ -49,12 +49,12 @@ WHERE onr_id='b2b646d813884ee6a5985475448660e0';
 
 /* FUNCTION */
 DELIMITER $$
-CREATE FUNCTION jumlah_itemUser(idUser CHAR(32))
+CREATE FUNCTION jumlah_itemUser(idUser CHAR(50))
     RETURNS INT
     DETERMINISTIC
     BEGIN
     DECLARE jumlahItem INT;
-    SELECT COUNT(onr.onr_id) AS Jumlah_ItemOffer INTO jumlahItem
+    SELECT COUNT(onrs.onr_id) AS Jumlah_ItemOffer INTO jumlahItem
     FROM onrs INNER JOIN users ON users.`user_id`=onrs.`pelaku_id`
     WHERE onrs.onr = 'OFFER'
     AND users.user_id = idUser;
@@ -63,3 +63,22 @@ CREATE FUNCTION jumlah_itemUser(idUser CHAR(32))
 DELIMITER ;
 
 SELECT DISTINCT jumlah_itemUser('a967b5e523604ce4898720edbd004928') AS 'Jumlah item offer' FROM users u, onrs, transaksi t, kategori k;
+
+/* PROCEDURE */
+DELIMITER $$
+CREATE PROCEDURE sesuaikan(paketkursus VARCHAR(100), diskon INT)
+BEGIN
+UPDATE pengajar p, paket_kursus pk SET pk.pk_tarif = pk.pk_tarif-diskon WHERE pk.pk_nama = paketkursus;
+UPDATE pengajar p, paket_kursus pk SET p.p_gaji = p.p_gaji-diskon WHERE p.id_pengajar = pk.id_pengajar AND pk.pk_nama = paketkursus;
+END $$
+DELIMITER ;
+
+DELIMITER $$
+CREATE PROCEDURE updateRating(idUser CHAR(50))
+BEGIN
+UPDATE users u, transaksi t SET u.rating = ((u.rating + t.rate) / 2) WHERE u.user_id = idUser;
+END $$
+DELIMITER ;
+
+
+CALL sesuaikan('Class Basic','100000');
