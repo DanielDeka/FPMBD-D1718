@@ -52,7 +52,7 @@ CREATE FUNCTION jumlah_itemMakanan(idUser CHAR(50))
     DETERMINISTIC
     BEGIN
     DECLARE jumlahItem INT;
-    SELECT COUNT(onrs.onr_id) AS Jumlah_ItemOffer INTO jumlahItem
+    SELECT COUNT(onrs.onr_id) INTO jumlahItem
     FROM onrs INNER JOIN users ON users.`user_id`=onrs.`pelaku_id`
     WHERE onrs.kategori = '1'
     AND users.user_id = idUser;
@@ -60,12 +60,13 @@ CREATE FUNCTION jumlah_itemMakanan(idUser CHAR(50))
     END$$
 DELIMITER ;
 
-CREATE FUNCTION jumlah_itemIbuanak(idUser CHAR(50))
+DELIMITER $$
+CREATE FUNCTION jumlah_itemTaksesoris(idUser CHAR(50))
     RETURNS INT
     DETERMINISTIC
     BEGIN
     DECLARE jumlahItem INT;
-    SELECT COUNT(onrs.onr_id) AS Jumlah_ItemOffer INTO jumlahItem
+    SELECT COUNT(onrs.onr_id) INTO jumlahItem
     FROM onrs INNER JOIN users ON users.`user_id`=onrs.`pelaku_id`
     WHERE onrs.kategori = '2'
     AND users.user_id = idUser;
@@ -73,12 +74,13 @@ CREATE FUNCTION jumlah_itemIbuanak(idUser CHAR(50))
     END$$
 DELIMITER ;
 
-CREATE FUNCTION jumlah_itemUser(idUser CHAR(50))
+DELIMITER $$
+CREATE FUNCTION jumlah_itemIbuanak(idUser CHAR(50))
     RETURNS INT
     DETERMINISTIC
     BEGIN
     DECLARE jumlahItem INT;
-    SELECT COUNT(onrs.onr_id) AS Jumlah_ItemOffer INTO jumlahItem
+    SELECT COUNT(onrs.onr_id) INTO jumlahItem
     FROM onrs INNER JOIN users ON users.`user_id`=onrs.`pelaku_id`
     WHERE onrs.kategori = '3'
     AND users.user_id = idUser;
@@ -86,12 +88,13 @@ CREATE FUNCTION jumlah_itemUser(idUser CHAR(50))
     END$$
 DELIMITER ;
 
-CREATE FUNCTION jumlah_itemUser(idUser CHAR(50))
+DELIMITER $$
+CREATE FUNCTION jumlah_itemGames(idUser CHAR(50))
     RETURNS INT
     DETERMINISTIC
     BEGIN
     DECLARE jumlahItem INT;
-    SELECT COUNT(onrs.onr_id) AS Jumlah_ItemOffer INTO jumlahItem
+    SELECT COUNT(onrs.onr_id) INTO jumlahItem
     FROM onrs INNER JOIN users ON users.`user_id`=onrs.`pelaku_id`
     WHERE onrs.kategori = '4'
     AND users.user_id = idUser;
