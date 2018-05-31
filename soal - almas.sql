@@ -13,11 +13,9 @@ CREATE TRIGGER insert_users
 AFTER INSERT ON users
 FOR EACH ROW
 BEGIN
-  INSERT INTO `users` VALUES (new.`user_id`, new.`user_nama`, new.`email`, new.`password`, new.`alamat`, new.`jenis_kel`, new.`tgl_lahir`, new.`rating`, new.`token`, new.`aboutme`, new.`no_telp`, new.`remember_token`, new.`created_at`, new,`updated_at`, SYSDATE(), 'INSERT');
+  INSERT INTO `users_new` VALUES (new.`user_id`, new.`user_nama`, new.`email`, new.`password`, new.`alamat`, new.`jenis_kel`, new.`tgl_lahir`, new.`rating`, new.`token`, new.`aboutme`, new.`no_telp`, SYSDATE(), 'INSERT');
 END$$
 DELIMITER;
-
-bikin akun di web
 
 -- update data
 DELIMITER$$
@@ -25,13 +23,9 @@ CREATE TRIGGER update_users
 AFTER UPDATE ON users
 FOR EACH ROW
 BEGIN
-  INSERT INTO `users` VALUES (old.`user_id`, new.`user_nama`, old.`email`, old.`password`, new.`alamat`, old.`jenis_kel`, old.`tgl_lahir`, old.`rating`, old.`token`, new.`aboutme`, new.`no_telp`, old.`remember_token`, old.`created_at`, old,`updated_at`, SYSDATE(), 'UPDATE');
+  INSERT INTO `users_new` VALUES (old.`user_id`, new.`user_nama`, old.`email`, old.`password`, new.`alamat`, old.`jenis_kel`, old.`tgl_lahir`, old.`rating`, old.`token`, new.`aboutme`, new.`no_telp`, old.`remember_token`, old.`created_at`, old,`updated_at`, SYSDATE(), 'UPDATE');
 END$$
 DELIMITER ;
-
-UPDATE users
-SET user_nama='Siapa Gitu', alamat='Dimana Gitu', aboutme='-', no_telp='087876543217'
-WHERE user_id='0dd93cd0-6440-11e8-bea8-9f219474dfdb';
 
 -- delete data
 DELIMITER$$
@@ -39,12 +33,9 @@ CREATE TRIGGER delete_users
 AFTER DELETE ON users
 FOR EACH ROW
 BEGIN
-  INSERT INTO `users` VALUES (old.`user_id`, old.`user_nama`, old.`email`, old.`password`, old.`alamat`, old.`jenis_kel`, old.`tgl_lahir`, old.`rating`, old.`token`, old.`aboutme`, old.`no_telp`, old.`remember_token`, old.`created_at`, old,`updated_at`, SYSDATE(), 'DELETE');
+  INSERT INTO `users_new` VALUES (old.`user_id`, old.`user_nama`, old.`email`, old.`password`, old.`alamat`, old.`jenis_kel`, old.`tgl_lahir`, old.`rating`, old.`token`, old.`aboutme`, old.`no_telp`, SYSDATE(), 'DELETE');
 END$$
 DELIMITER ;
-
-DELETE FROM users
-WHERE user_id='0dd93cd0-6440-11e8-bea8-9f219474dfdb';
 
 /*FUNCTION KATEGORI DI PROFILE*/
 
@@ -107,19 +98,26 @@ DELIMITER ;
 /*PROCEDURE KATEGORI DI PAGE KATEGORI*/
 
 DELIMITER $$
-CREATE PROCEDURE tambah(idKategori CHAR)
+CREATE PROCEDURE tambah(idKategori CHAR, jml INT)
 BEGIN
-  UPDATE kategoris k, onrs o SET k.jumlah_item=COUNT(o.kategori)
-  WHERE idKategori = k.kategori_id
-  AND k.kategori_id = o.kategori
+  UPDATE kategoris k SET k.jumlah_item = k.jumlah_item + jml WHERE k.kategori_id = idKategori;
 END $$
 DELIMITER ;
 
-CALL tambah('1');
+CALL tambah('1', '200');
+
+DELIMITER $$
+CREATE PROCEDURE kurang(idKategori CHAR, jml INT)
+BEGIN
+  UPDATE kategoris k SET k.jumlah_item = k.jumlah_item - jml WHERE k.kategori_id = idKategori;
+END $$
+DELIMITER ;
+
+CALL kurang('1', '150');
 
 /*INDEX ONRS NAMA BARANG*/
 SELECT * FROM onrs
-WHERE nama_barang LIKE '%deka%';
+WHERE nama_barang LIKE '%a%';
 
 CREATE INDEX idx_kata
 ON onrs(nama_barang);
